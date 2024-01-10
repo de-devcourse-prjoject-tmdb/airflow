@@ -16,7 +16,6 @@
 # under the License.
 #
 
-# Basic Airflow cluster configuration for CeleryExecutor with Redis and PostgreSQL.
 #
 # WARNING: This configuration is for local development. Do not use it in a production deployment.
 #
@@ -111,6 +110,20 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
 
   airflow-triggerer:
     <<: *airflow-common
