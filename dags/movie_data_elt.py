@@ -96,7 +96,7 @@ runtime_sql = '''
 '''
 
 
-with DAG('elt_movie_datal', 
+with DAG('elt_movie_data', 
         default_args = default_args, 
         description = 'DAG to update numeric, genre, runtime tables',
         schedule_interval = '@daily') as dag:
